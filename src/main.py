@@ -11,6 +11,9 @@ async def main():
     twitter_client = TwitterClient(jar)
     await twitter_client.test_authenticated_call()
 
+    # Send request to get posts for a user
+    await twitter_client.get_tweets(screen_name="elonmusk", count=30)
+
 
 if __name__ == "__main__":
     asyncio.run(main())

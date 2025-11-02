@@ -38,3 +38,4 @@ black .
 ## Links
 
 - [Twikit API](https://twikit.readthedocs.io/en/latest/twikit.html)
+- [Tweet Object](https://twikit.readthedocs.io/en/latest/twikit.html#module-twikit.tweet)
