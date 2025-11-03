@@ -29,21 +29,33 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--action",
+        "-a",
         choices=["tweets", "replies"],
         default="tweets",
         help="Action to perform",
     )
     parser.add_argument(
         "--screenname",
+        "-s",
         required=True,
         help="Twitter handle (without @) of the user to fetch tweets for.",
     )
-    parser.add_argument("--tweet-id", type=str, help="Tweet ID (for fetching replies)")
     parser.add_argument(
-        "--count", type=int, default=100, help="Number of tweets or replies to fetch"
+        "--tweet-id",
+        "-i",
+        type=str,
+        help="Tweet ID (for fetching replies)",
+    )
+    parser.add_argument(
+        "--count",
+        "-c",
+        type=int,
+        default=100,
+        help="Number of tweets or replies to fetch",
     )
     parser.add_argument(
         "--top",
+        "-t",
         type=int,
         default=5,
         help="Number of top replies to show (for replies only)",
