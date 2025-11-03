@@ -1,7 +1,6 @@
 # Twitter Scraper
 
-Twitter API script built using [twikit](https://github.com/d60/twikit). It allows you to fetch tweets from a specific user and get the top replies for a given tweet, and export
-the results as CSV files.
+Twitter API script built using [twikit](https://github.com/d60/twikit). It allows you to get the most viewed tweets from a specific user and get the most liked replies for a given tweet, and export the results as CSV files.
 
 ## Links
 
@@ -37,7 +36,7 @@ make setup
 USERNAME=username123
 ```
 
-4. Theres an issue with [itemContent](https://github.com/d60/twikit/issues/375) in `twikit` which is fixed [in this PR](https://github.com/d60/twikit/pull/377) but isn't merged. Ignore this step if the fix was merged.
+4. Theres an issue with twikit's [get_tweet_by_id()](https://github.com/d60/twikit/issues/375) which is fixed [in this PR](https://github.com/d60/twikit/pull/377) but isn't merged. Ignore this step if the fix was merged.
 
 - Go into `venv/bin/twikit/client/client.py` and change `reply_next_cursor = entries[-1]['content']['itemContent']['value']` to `reply_next_cursor = entries[-1]['content']['value']`
 
@@ -72,11 +71,11 @@ options:
 # Get script arguments
 python3 src/main.py -h
 
-# Get tweets for a specific user. API limit is 50 requests every 15 minutes.
-python3 src/main.py -a tweets -s bigfatsurprise -c 200 -f nina_tweets
-python3 src/main.py --action tweets --screenname elonmusk --count 100 --filename musk_tweets
+# Get most viewed tweets for a specific user. API limit is 50 requests (~1000 tweets) every 15 minutes .
+python3 src/main.py -a tweets -s bigfatsurprise -t 100 -c 1000 -f nina_tweets
+python3 src/main.py --action tweets --screenname elonmusk --top 100 --count 1000 --filename musk_tweets
 
-# Get top replies from a tweet. API limit is 150 requests every 15 minutes.
+# Get most liked replies for a tweet. API limit is 150 requests (~3000 replies) every 15 minutes.
 python3 src/main.py -a replies -i 1984717014620078498 -t 5 -c 100
 python3 src/main.py --action replies --tweet-id 1984717014620078498 --top 5 --count 100
 ```

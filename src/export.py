@@ -28,11 +28,12 @@ async def export_tweets_to_csv(
     # Build header row in lowercase snake_case
     headers = [
         "id",
-        "text",
         "author",
+        "timestamp",
+        "text",
+        "views",
         "likes",
         "retweets",
-        "timestamp",
         "reply_count",
     ]
     if original_tweet_id is not None:
@@ -45,11 +46,12 @@ async def export_tweets_to_csv(
         for tweet in tweets:
             row = [
                 tweet.id,
-                tweet.text.replace("\n", " "),
                 tweet.user.screen_name,
+                tweet.created_at,
+                tweet.text.replace("\n", " "),
+                tweet.view_count,
                 tweet.favorite_count,
                 tweet.retweet_count,
-                tweet.created_at,
                 tweet.reply_count,
             ]
             if original_tweet_id is not None:

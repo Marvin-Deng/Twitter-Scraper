@@ -18,7 +18,44 @@ class TwitterClient:
         except Exception as e:
             raise RuntimeError("Auth test failed (Twikit call).") from e
 
-    async def get_tweets(self, screen_name: str, count=10) -> list:
+    async def get_top_tweets(self, screen_name: str, top: int = 5, count: int = 100):
+        """
+        Gets the most viewed posts created by a specific user.
+        """
+        all_tweets = await self.__get_tweets(screen_name, count)
+
+        # Sort tweets by views (descending)
+        sorted_tweets = sorted(
+            all_tweets,
+            key=lambda t: int(t.view_count) if t.view_count is not None else 0,
+            reverse=True,
+        )
+
+        top_tweets = sorted_tweets[:top]
+        print(f"\nTop {top} posts by views:")
+        await self.__print_tweets(top_tweets)
+        return top_tweets
+
+    async def get_top_replies(self, tweet_id: str, top: int = 5, count: int = 100):
+        """
+        Gets the most liked replies for a specific tweet.
+        """
+        all_replies = await self.__get_replies(tweet_id, count)
+        if not all_replies:
+            print("No replies found.")
+            return []
+
+        # Sort replies by likes (descending)
+        sorted_replies = sorted(
+            all_replies, key=lambda t: t.favorite_count, reverse=True
+        )
+
+        top_replies = sorted_replies[:top]
+        print(f"\nTop {top} replies by likes:")
+        await self.__print_tweets(top_replies)
+        return top_replies
+
+    async def __get_tweets(self, screen_name: str, count: int) -> list:
         """
         Fetch at least `count` tweets for a user.
         """
@@ -53,25 +90,6 @@ class TwitterClient:
 
         print(f"Total tweets fetched: {len(all_tweets)}")
         return all_tweets
-
-    async def get_top_replies(self, tweet_id: str, top: int = 5, count: int = 100):
-        """
-        Fetch replies for a tweet and return the top ones ranked by likes.
-        """
-        all_replies = await self.__get_replies(tweet_id, count)
-        if not all_replies:
-            print("No replies found.")
-            return []
-
-        # Sort by likes descending
-        sorted_replies = sorted(
-            all_replies, key=lambda t: t.favorite_count, reverse=True
-        )
-
-        top_replies = sorted_replies[:top]
-        print(f"\nTop {top} replies by likes:")
-        await self.__print_tweets(top_replies)
-        return top_replies
 
     async def __get_replies(self, tweet_id: str, count: int):
         """
@@ -117,6 +135,7 @@ class TwitterClient:
             print(f"ID: {tweet.id}")
             print(f"Text: {tweet.text}")
             print(f"Author: @{tweet.user.screen_name}")
+            print(f"Views: {tweet.view_count}")
             print(f"Likes: {tweet.favorite_count}")
             print(f"Retweets: {tweet.retweet_count}")
             print(f"Timestamp: {tweet.created_at}")

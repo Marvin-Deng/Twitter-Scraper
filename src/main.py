@@ -17,8 +17,8 @@ async def main(args):
     filename_prefix = ""
     action = args.action
     if action == "tweets":
-        tweets = await twitter_client.get_tweets(
-            screen_name=args.screenname, count=args.count
+        tweets = await twitter_client.get_top_tweets(
+            screen_name=args.screenname, top=args.top, count=args.count
         )
         filename_prefix = action
     elif action == "replies":
