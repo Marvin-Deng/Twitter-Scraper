@@ -30,9 +30,13 @@ async def main(args):
         print(f"Unknown action: {args.action}")
         return
 
-    # Append timestamp to filename
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"{filename_prefix}_{timestamp}.csv"
+    if args.filename:
+        filename = args.filename
+        if not filename.lower().endswith(".csv"):
+            filename += ".csv"
+    else:
+        timestamp = datetime.now().strftime("%H.%M.%S.%f")
+        filename = f"{filename_prefix}_{timestamp}.csv"
 
     # Export to CSV
     await export_tweets_to_csv(tweets, filename)
@@ -75,6 +79,12 @@ if __name__ == "__main__":
         type=int,
         default=5,
         help="Number of top replies to show (for replies only)",
+    )
+    parser.add_argument(
+        "--filename",
+        "-f",
+        type=str,
+        help="Custom filename for the exported CSV",
     )
 
     args = parser.parse_args()
