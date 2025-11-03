@@ -1,6 +1,5 @@
 import argparse
 import asyncio
-from datetime import datetime
 from client import TwitterClient
 from cookies import save_cookies_to_json
 from export import export_tweets_to_csv
@@ -35,12 +34,15 @@ async def main(args):
         filename = args.filename
         if not filename.lower().endswith(".csv"):
             filename += ".csv"
-    else:
-        timestamp = datetime.now().strftime("%H.%M.%S.%f")
-        filename = f"{filename_prefix}_{timestamp}.csv"
+    elif args.screenname:
+        filename = f"{filename_prefix}_{args.screenname}.csv"
+    elif args.tweet_id:
+        filename = f"{filename_prefix}_{args.tweet_id}.csv"
 
     # Export to CSV
-    await export_tweets_to_csv(tweets, filename)
+    await export_tweets_to_csv(
+        tweets=tweets, filename=filename, original_tweet_id=args.tweet_id
+    )
     print(f"Tweets exported to {filename}")
 
 
