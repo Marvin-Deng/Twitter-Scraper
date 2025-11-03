@@ -22,7 +22,7 @@ class TwitterClient:
         """
         Gets the most viewed posts created by a specific user.
         """
-        all_tweets = await self.__get_tweets(screen_name, count)
+        all_tweets = await self.__get_tweets(screen_name=screen_name, count=count)
 
         # Sort tweets by views (descending)
         sorted_tweets = sorted(
@@ -37,10 +37,11 @@ class TwitterClient:
         return top_tweets
 
     async def get_top_replies(
-        self, tweet_ids: list[str], top: int = 20, count: int = 20
+        self, screen_name: str, tweet_ids: list[str], top: int = 20, count: int = 20
     ):
         """
         Fetch replies for multiple tweets and return the top replies sorted by likes.
+        Excludes replies authored by the poster (screen_name).
         """
         all_replies = []
 
@@ -50,11 +51,14 @@ class TwitterClient:
                 if not replies:
                     continue
 
-                # Annotate each reply with the original tweet ID
+                # Annotate and filter out self-replies
+                valid_replies = []
                 for reply in replies:
                     setattr(reply, "original_tweet_id", tweet_id)
+                    if reply.user.screen_name.lower() != screen_name.lower():
+                        valid_replies.append(reply)
 
-                all_replies.extend(replies)
+                all_replies.extend(valid_replies)
 
             except Exception as e:
                 print(f"Failed to fetch replies for tweet {tweet_id}: {e}")
@@ -66,11 +70,13 @@ class TwitterClient:
 
         # Sort all replies by likes (descending)
         sorted_replies = sorted(
-            all_replies, key=lambda t: t.favorite_count, reverse=True
+            all_replies, key=lambda t: t.favorite_count or 0, reverse=True
         )
 
         top_replies = sorted_replies[:top]
-        print(f"\nTop {top} replies by likes across {len(tweet_ids)} tweets:")
+        print(
+            f"\nTop {top} replies by likes (excluding self-replies) across {len(tweet_ids)} tweets:"
+        )
         await self.__print_tweets(top_replies)
         return top_replies
 

@@ -25,7 +25,10 @@ async def main(args):
         print(" ".join(tweet_ids))  # string of top tweet IDs for top reply script
     elif action == "replies":
         tweets = await twitter_client.get_top_replies(
-            tweet_ids=args.tweet_ids, top=args.top, count=args.count
+            screen_name=args.screenname,
+            tweet_ids=args.tweet_ids,
+            top=args.top,
+            count=args.count,
         )
         filename_prefix = action
     else:
@@ -36,10 +39,8 @@ async def main(args):
         filename = args.filename
         if not filename.lower().endswith(".csv"):
             filename += ".csv"
-    elif args.screenname:
-        filename = f"{filename_prefix}_{args.screenname}.csv"
     else:
-        filename = f"{filename_prefix}.csv"
+        filename = f"{filename_prefix}_{args.screenname}.csv"
 
     # Export to CSV
     await export_tweets_to_csv(tweets=tweets, filename=filename)
@@ -60,7 +61,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "--screenname",
         "-s",
-        help="Twitter handle (without @) of the user to fetch tweets for.",
+        required=True,
+        help="Twitter handle (without @) of the user to fetch tweets / exclude replies for.",
     )
     parser.add_argument(
         "--tweet-ids",
