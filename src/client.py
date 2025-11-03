@@ -79,11 +79,11 @@ class TwitterClient:
         all_replies = []
 
         try:
-            tweet_obj = await self.client.get_tweet_by_id(tweet_id)
-            if not tweet_obj:
-                raise ValueError(f"Could not find tweet with ID {tweet_id}")
+            tweet = await self.client.get_tweet_by_id(tweet_id)
+            if not tweet:
+                raise ValueError(f"Could not find tweet")
 
-            replies = tweet_obj.replies
+            replies = tweet.replies
             if not replies:
                 raise ValueError("No replies found.")
 
@@ -94,7 +94,7 @@ class TwitterClient:
             # Continue fetching additional reply pages until we reach the count
             while len(all_replies) < count:
                 try:
-                    next_page = await tweet_obj.next()
+                    next_page = await tweet.next()
                     if not next_page or not next_page.replies:
                         break
 
@@ -109,6 +109,10 @@ class TwitterClient:
             print(f"Total replies fetched: {len(all_replies)}")
             return all_replies
 
+        except AttributeError as e:
+            raise RuntimeError(
+                f"Twikit failed to fetch tweet {tweet_id}. It may not exist or is inaccessible."
+            ) from e
         except Exception as e:
             raise RuntimeError(f"Error getting replies for tweet {tweet_id}.") from e
 
