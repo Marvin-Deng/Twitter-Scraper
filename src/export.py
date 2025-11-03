@@ -8,37 +8,53 @@ else:  # macOS/Linux
     DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), "Downloads")
 
 
-async def export_tweets_to_csv(tweets: list[Tweet], filename: str):
+async def export_tweets_to_csv(
+    tweets: list[Tweet], filename: str, original_tweet_id: str
+):
     """
-    Export a list of Tweet objects to a CSV file in the reports directory.
+    Export a list of Tweet objects to a CSV file in the Downloads directory.
+    Adds an 'original_tweet_id' column for replies.
     """
     if not tweets:
         print("No tweets to export.")
         return
 
-    # Ensure reports directory exists
+    # Ensure download directory exists
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
     # Full path to output file
     filepath = os.path.join(DOWNLOAD_DIR, filename)
 
+    # Build header row in lowercase snake_case
+    headers = [
+        "id",
+        "text",
+        "author",
+        "likes",
+        "retweets",
+        "timestamp",
+        "reply_count",
+    ]
+    if original_tweet_id is not None:
+        headers.append("original_tweet_id")
+
     with open(filepath, mode="w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(
-            ["ID", "Text", "Author", "Likes", "Retweets", "Timestamp", "Reply count"]
-        )
+        writer.writerow(headers)
 
         for tweet in tweets:
-            writer.writerow(
-                [
-                    tweet.id,
-                    tweet.text.replace("\n", " "),
-                    tweet.user.screen_name,
-                    tweet.favorite_count,
-                    tweet.retweet_count,
-                    tweet.created_at,
-                    tweet.reply_count,
-                ]
-            )
+            row = [
+                tweet.id,
+                tweet.text.replace("\n", " "),
+                tweet.user.screen_name,
+                tweet.favorite_count,
+                tweet.retweet_count,
+                tweet.created_at,
+                tweet.reply_count,
+            ]
+            if original_tweet_id is not None:
+                row.append(original_tweet_id)
+
+            writer.writerow(row)
 
     print(f"Exported {len(tweets)} tweets to {filepath}")
