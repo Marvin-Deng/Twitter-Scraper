@@ -1,7 +1,9 @@
 import argparse
 import asyncio
-from cookies import save_cookies_to_json
+from datetime import datetime
 from client import TwitterClient
+from cookies import save_cookies_to_json
+from export import export_tweets_to_csv
 
 
 async def main(args):
@@ -12,15 +14,29 @@ async def main(args):
     twitter_client = TwitterClient()
     await twitter_client.test_authenticated_call()
 
-    # Send request to get posts for a user
+    tweets = []
+    filename_prefix = ""
     if args.action == "tweets":
-        await twitter_client.get_tweets(screen_name=args.screenname, count=args.count)
+        tweets = await twitter_client.get_tweets(
+            screen_name=args.screenname, count=args.count
+        )
+        filename_prefix = "tweets"
     elif args.action == "replies":
-        await twitter_client.get_top_replies(
+        tweets = await twitter_client.get_top_replies(
             tweet_id=args.tweet_id, top=args.top, count=args.count
         )
+        filename_prefix = "replies"
     else:
         print(f"Unknown action: {args.action}")
+        return
+
+    # Append timestamp to filename
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{filename_prefix}_{timestamp}.csv"
+
+    # Export to CSV
+    await export_tweets_to_csv(tweets, filename)
+    print(f"Tweets exported to {filename}")
 
 
 if __name__ == "__main__":

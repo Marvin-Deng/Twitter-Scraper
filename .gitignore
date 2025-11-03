@@ -5,9 +5,11 @@ __pycache__/
 *.pyc
 
 # Environment
-
 venv/
 .env
 
 # Cookies
 cookies.json
+
+# Reports
+reports/

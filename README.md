@@ -70,6 +70,8 @@ python src/main.py --action replies --screenname elonmusk --tweet-id 19847170146
 
    <img width="428" height="181" alt="Screenshot 2025-11-02 at 1 58 30 PM" src="https://github.com/user-attachments/assets/4ab7ebed-70d6-43ca-9167-5719a4e5d9c4" />
 
+4. View generated CSV reports under `/reports`.
+
 ### Update Requirements
 
 ```shell
