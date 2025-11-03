@@ -16,16 +16,17 @@ async def main(args):
 
     tweets = []
     filename_prefix = ""
-    if args.action == "tweets":
+    action = args.action
+    if action == "tweets":
         tweets = await twitter_client.get_tweets(
             screen_name=args.screenname, count=args.count
         )
-        filename_prefix = "tweets"
-    elif args.action == "replies":
+        filename_prefix = action
+    elif action == "replies":
         tweets = await twitter_client.get_top_replies(
             tweet_id=args.tweet_id, top=args.top, count=args.count
         )
-        filename_prefix = "replies"
+        filename_prefix = action
     else:
         print(f"Unknown action: {args.action}")
         return

@@ -72,13 +72,13 @@ options:
 # Get script arguments
 python3 src/main.py -h
 
-# Get tweets for a specific user. API limit is 50 requests every 15 minutes. Keep count to below 50.
-python3 src/main.py -a tweets -s elonmusk -c 10 -f musk_tweets
-python3 src/main.py --action tweets --screenname elonmusk --count 10 --filename musk_tweets
+# Get tweets for a specific user. API limit is 50 requests every 15 minutes.
+python3 src/main.py -a tweets -s bigfatsurprise -c 200 -f nina_tweets
+python3 src/main.py --action tweets --screenname elonmusk --count 100 --filename musk_tweets
 
-# Get top replies from a tweet. API limit is 150 requests every 15 minutes. Keep count to below 150.
-python3 src/main.py -a replies -s elonmusk -i 1984717014620078498 -t 5 -c 100 -f top_replies_on_musk_tweets
-python3 src/main.py --action replies --screenname elonmusk --tweet-id 1984717014620078498 --top 5 --count 100 --filename top_replies_on_musk_tweets
+# Get top replies from a tweet. API limit is 150 requests every 15 minutes.
+python3 src/main.py -a replies -i 1984717014620078498 -t 5 -c 100 -f top_replies
+python3 src/main.py --action replies --tweet-id 1984717014620078498 --top 5 --count 100 --filename top_replies
 ```
 
 4. Allow the script access to browser cookies. Enter your computer password and click "Always allow".
