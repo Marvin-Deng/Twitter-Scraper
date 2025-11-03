@@ -1,28 +1,18 @@
+import json
 import browser_cookie3
-from requests.cookies import RequestsCookieJar
-from constants import DOMAIN
+from constants import DOMAIN, COOKIES_FILE
 
 
-def get_cookiejar_from_browser() -> RequestsCookieJar:
-    """
-    Fetch cookies from the browser and return a RequestsCookieJar containing
-    all relevant tokens for the target domain.
-    """
+def save_cookies_to_json():
     cj = browser_cookie3.chrome(domain_name=DOMAIN)
-    jar = RequestsCookieJar()
-    seen = {}  # key: (name, domain, path) -> cookie
+    cookies_dict = {}
 
     allowed_domains = (DOMAIN.lower(), f".{DOMAIN.lower()}")
-
-    required_cookies = {"auth_token", "ct0", "twid", "cf_clearance"}
 
     for c in cj:
         name = getattr(c, "name", None)
         value = getattr(c, "value", "")
         domain = getattr(c, "domain", "")
-        path = getattr(c, "path", "/")
-        secure = bool(getattr(c, "secure", False))
-        expires = getattr(c, "expires", None)
 
         if not name or not value:
             continue
@@ -31,16 +21,9 @@ def get_cookiejar_from_browser() -> RequestsCookieJar:
             print(f"Skipping cookie for non-target domain: {name} ({domain})")
             continue
 
-        key = (name, domain, path)
-        seen[key] = (name, value, domain, path, secure, expires)
+        cookies_dict[name] = value
 
-    for name, value, domain, path, secure, expires in seen.values():
-        jar.set(name, value, domain=domain, path=path, secure=secure, expires=expires)
+    with open(COOKIES_FILE, "w") as f:
+        json.dump(cookies_dict, f, indent=2)
 
-    # Print warnings if required cookies are missing
-    missing = [c for c in required_cookies if c not in jar]
-    if missing:
-        print(f"Warning: the following important cookies are missing: {missing}")
-
-    print(f"Loaded {len(jar)} cookies from browser for domain {DOMAIN}")
-    return jar
+    print(f"Saved {len(cookies_dict)} cookies to {COOKIES_FILE} for domain {DOMAIN}")
