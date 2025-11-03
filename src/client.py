@@ -26,25 +26,35 @@ class TwitterClient:
         Fetches the latest tweets for a specific user by their screen name.
         """
         print(f"\nFetching tweets for @{screen_name}...")
+        all_tweets = []
+
         try:
             user = await self.client.get_user_by_screen_name(screen_name)
             if not user:
                 print(f"Could not find user @{screen_name}")
                 return []
 
-            tweets = await self.client.get_user_tweets(
-                user.id,
-                tweet_type="Tweets",
-            )
+            tweets = await self.client.get_user_tweets(user.id, tweet_type="Tweets")
+            all_tweets.extend(tweets)
             self.print_tweets(tweets)
 
-            # more_tweets = await tweets.next()
-            # self.print_tweets(more_tweets)
+            # Continue fetching next pages until count is reached
+            while len(all_tweets) < count:
+                if hasattr(tweets, "next"):
+                    try:
+                        tweets = await tweets.next()
+                        if not tweets:
+                            break
+                        all_tweets.extend(tweets)
+                        self.print_tweets(tweets)
+                    except Exception as e:
+                        print(f"Error fetching next page: {repr(e)}")
+                        break
+                else:
+                    break
 
-            print(f"First page: {len(tweets)} found!")
-            # print(f"Second page: {len(more_tweets)} found!")
+            return all_tweets[:count]
 
-            return tweets
         except Exception as e:
             print(f"Error getting tweets for @{screen_name}: {repr(e)}")
             return []
