@@ -88,7 +88,7 @@ class TwitterClient:
                 raise ValueError("No replies found.")
 
             all_replies.extend(replies)
-            self.print_tweets(replies)
+            self.__print_tweets(replies)
             print(f"First page: {len(replies)} replies found!")
 
             # Continue fetching additional reply pages until we reach the count
@@ -100,7 +100,7 @@ class TwitterClient:
 
                     new_replies = next_page.replies
                     all_replies.extend(new_replies)
-                    self.print_tweets(new_replies)
+                    self.__print_tweets(new_replies)
                     print(f"Next page: {len(new_replies)} replies found!")
                 except Exception as e:
                     print(f"Error fetching next page of replies for tweet {tweet_id}.")
