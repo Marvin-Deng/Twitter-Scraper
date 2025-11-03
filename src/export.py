@@ -8,9 +8,7 @@ else:  # macOS/Linux
     DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), "Downloads")
 
 
-async def export_tweets_to_csv(
-    tweets: list[Tweet], filename: str, original_tweet_id: str
-):
+async def export_tweets_to_csv(tweets: list[Tweet], filename: str):
     """
     Export a list of Tweet objects to a CSV file in the Downloads directory.
     Adds an 'original_tweet_id' column for replies.
@@ -35,9 +33,8 @@ async def export_tweets_to_csv(
         "likes",
         "retweets",
         "reply_count",
+        "original_tweet_id",
     ]
-    if original_tweet_id is not None:
-        headers.append("original_tweet_id")
 
     with open(filepath, mode="w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
@@ -53,9 +50,8 @@ async def export_tweets_to_csv(
                 tweet.favorite_count,
                 tweet.retweet_count,
                 tweet.reply_count,
+                getattr(tweet, "original_tweet_id", None),
             ]
-            if original_tweet_id is not None:
-                row.append(original_tweet_id)
 
             writer.writerow(row)
 

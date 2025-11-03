@@ -36,22 +36,41 @@ class TwitterClient:
         await self.__print_tweets(top_tweets)
         return top_tweets
 
-    async def get_top_replies(self, tweet_id: str, top: int = 5, count: int = 100):
+    async def get_top_replies(
+        self, tweet_ids: list[str], top: int = 20, count: int = 20
+    ):
         """
-        Gets the most liked replies for a specific tweet.
+        Fetch replies for multiple tweets and return the top replies sorted by likes.
         """
-        all_replies = await self.__get_replies(tweet_id, count)
+        all_replies = []
+
+        for tweet_id in tweet_ids:
+            try:
+                replies = await self.__get_replies(tweet_id, count)
+                if not replies:
+                    continue
+
+                # Annotate each reply with the original tweet ID
+                for reply in replies:
+                    setattr(reply, "original_tweet_id", tweet_id)
+
+                all_replies.extend(replies)
+
+            except Exception as e:
+                print(f"Failed to fetch replies for tweet {tweet_id}: {e}")
+                break
+
         if not all_replies:
-            print("No replies found.")
+            print("No replies found across all tweets.")
             return []
 
-        # Sort replies by likes (descending)
+        # Sort all replies by likes (descending)
         sorted_replies = sorted(
             all_replies, key=lambda t: t.favorite_count, reverse=True
         )
 
         top_replies = sorted_replies[:top]
-        print(f"\nTop {top} replies by likes:")
+        print(f"\nTop {top} replies by likes across {len(tweet_ids)} tweets:")
         await self.__print_tweets(top_replies)
         return top_replies
 
