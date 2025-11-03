@@ -1,7 +1,11 @@
 import os
 import csv
-from constants import REPORTS_DIR
 from twikit import Tweet
+
+if os.name == "nt":  # Windows
+    DOWNLOAD_DIR = os.path.join(os.environ["USERPROFILE"], "Downloads")
+else:  # macOS/Linux
+    DOWNLOAD_DIR = os.path.join(os.path.expanduser("~"), "Downloads")
 
 
 async def export_tweets_to_csv(tweets: list[Tweet], filename: str):
@@ -13,10 +17,10 @@ async def export_tweets_to_csv(tweets: list[Tweet], filename: str):
         return
 
     # Ensure reports directory exists
-    os.makedirs(REPORTS_DIR, exist_ok=True)
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
     # Full path to output file
-    filepath = os.path.join(REPORTS_DIR, filename)
+    filepath = os.path.join(DOWNLOAD_DIR, filename)
 
     with open(filepath, mode="w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
