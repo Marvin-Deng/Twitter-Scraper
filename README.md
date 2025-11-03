@@ -1,6 +1,7 @@
 # Twitter Scraper
 
-Twitter API script built using [twikit](https://github.com/d60/twikit).
+Twitter API script built using [twikit](https://github.com/d60/twikit). It allows you to fetch tweets from a specific user and get the top replies for a given tweet, and export
+the results as CSV files.
 
 ## Links
 
@@ -28,7 +29,7 @@ git clone git@github.com:Marvin-Deng/DIG-120.git
 make setup
 ```
 
-3. Add your Twitter username to `.env`. If you screen name is @username123, then your username is username123.
+3. Add your Twitter username to `.env`. If your screen name is @username123, then your username is username123.
 
 ```shell
 # .env
@@ -63,7 +64,7 @@ venv\Scripts\activate
 options:
   - -a, --action: tweets or replies (default: tweets)
   - -s, --screenname: Twitter username to fetch tweets for (required for tweets action)
-  - -i, --tweet-id, : Tweet ID to fetch replies for (required for replies action)
+  - -i, --tweet-id: Tweet ID to fetch replies for (required for replies action)
   - -c, --count: Number of tweets or replies to fetch (default: 100)
   - -t, --top: Number of top replies to show (for replies only, default: 5)
   - -f, --filename: Optional custom filename for CSV export
