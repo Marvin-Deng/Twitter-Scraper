@@ -10,7 +10,7 @@ For getting individual tweets by ID (replies), the API limit is 150 requests (~3
 
 ### Project
 
-- [Notebooks + Assignments](https://docs.google.com/document/d/1s9ht5jLj01NJ3QdozLH6LFmnPcYn3m2UMf0pEPqF5B4/edit?tab=t.0)
+- [DGT 120 Project Links](https://docs.google.com/document/d/1s9ht5jLj01NJ3QdozLH6LFmnPcYn3m2UMf0pEPqF5B4/edit?tab=t.0)
 
 ### Twikit
 
@@ -23,7 +23,7 @@ For getting individual tweets by ID (replies), the API limit is 150 requests (~3
 1. Clone the repo.
 
 ```shell
-git clone git@github.com:Marvin-Deng/DIG-120.git
+git clone git@github.com:Marvin-Deng/Twitter-Scraper.git
 ```
 
 2. Run setup.
