@@ -82,8 +82,8 @@ if __name__ == "__main__":
         "--top",
         "-t",
         type=int,
-        default=5,
-        help="Number of top replies to show (for replies only)",
+        default=0,
+        help="Number of top tweets/replies to show (0 or omitted = all)",
     )
     parser.add_argument(
         "--filename",
