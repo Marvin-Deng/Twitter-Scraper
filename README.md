@@ -42,7 +42,7 @@ USERNAME=username123
 
 4. Theres an issue with twikit's [get_tweet_by_id()](https://github.com/d60/twikit/issues/375) which is fixed [in this PR](https://github.com/d60/twikit/pull/377) but isn't merged. Ignore this step if the fix was merged.
 
-- Go into `venv/lib/python3.9/site-packages/twikit/client/client.py` and change `reply_next_cursor = entries[-1]['content']['itemContent']['value']` to `reply_next_cursor = entries[-1]['content']['value']`
+- Go into `venv/lib/python3.11/site-packages/twikit/client/client.py` and change `reply_next_cursor = entries[-1]['content']['itemContent']['value']` to `reply_next_cursor = entries[-1]['content']['value']`
 
 ## Usage
 
@@ -76,16 +76,15 @@ python3 src/main.py -h
 
 # Get most viewed tweets for a specific user (top 100 most viewed posts out of 1000 most recent posts).
 python3 src/main.py -a tweets -s bigfatsurprise -t 100 -c 1000 -f nina_tweets
-python3 src/main.py --action tweets --screenname elonmusk --top 100 --count 1000 --filename musk_tweets
+
+# Get many replies for a specific post
+python3 src/main.py -a replies -s bigfatsurprise -i 1962224063361020390 --count 100000
 
 # Get most liked replies for a single tweet (top 5 most liked replies across 100 replies for a single tweet, excluding the original poster).
 python3 src/main.py -a replies -s bigfatsurprise -i 1927722797909836090 -t 5 -c 100
-python3 src/main.py --action replies -screenname bigfatsurprise --tweet-ids 1927722797909836090 --top 5 --count 100
-
-python3 src/main.py --action replies -screenname bigfatsurprise --tweet-ids 1927722797909836090 --count 100000
 
 # Get most like replies for a list of tweets (top 100 most liked replies across 30 replies per tweet, excluding the original poster)
-python3 src/main.py -a replies -s bigfatsurprise -i 1927722797909836090 1962224063361020390 1921934899281281115 1978177514854842462 1973534268447154600 1945937731324178775 1945284503330586672 1922780121703801315 1961125436928528695 1938765277086482446 1970215889191493899 1954484867053342815 1947755708986101965 1955637347720323515 1955254718323953746 1965014252366045604 1970944639113781405 1952813803013587449 1932891956675555663 -t 100 -c 30
+python3 src/main.py -a replies -s bigfatsurprise -i 1927722797909836090 1962224063361020390 1921934899281281115 1978177514854842462 1973534268447154600 1945937731324178775 1945284503330586672 1922780121703801315 1961125436928528695 1938765277086482446 1970215889191493899 1954484867053342815 1947755708986101965 1955637347720323515 1955254718323953746 1965014252366045604 1970944639113781405 1952813803013587449 1932891956675555663 -c 10000
 ```
 
 4. Allow the script access to browser cookies. Enter your computer password and click "Always allow".
