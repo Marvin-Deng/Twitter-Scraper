@@ -6,13 +6,7 @@ For tweets, the API limit is 50 requests (~1000 tweets) every 15 minutes.
 
 For getting individual tweets by ID (replies), the API limit is 150 requests (~3000 replies) every 15 minutes.
 
-## Links
-
-### Project
-
-- [DGT 120 Project Links](https://docs.google.com/document/d/1s9ht5jLj01NJ3QdozLH6LFmnPcYn3m2UMf0pEPqF5B4/edit?tab=t.0)
-
-### Twikit
+## Twikit
 
 - [API Docs](https://twikit.readthedocs.io/en/latest/twikit.html)
 - [Rate Limit](https://github.com/d60/twikit/blob/main/ratelimits.md)
